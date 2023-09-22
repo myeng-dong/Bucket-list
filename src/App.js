@@ -9,7 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import MyButton from "./components/MyButton";
 
 
-
+//로딩 시작
 SplashScreen.preventAutoHideAsync();
 
 const Container = styled.SafeAreaView`
@@ -38,6 +38,7 @@ export default function App() {
     const [appIsReady, setAppIsReady] = useState(false);
     const [newTask, setNewTask] = useState('');
     const [tasks, setTasks] = useState({});
+    //로딩, (AsyncStorage)호출
     const loadTask = async () => {
          try {
            const loadedTasks = await AsyncStorage.getItem('tasks');
@@ -46,6 +47,7 @@ export default function App() {
            console.log(error.message);
          }
        };
+    //로딩상태에 따른 출력 여부
     useEffect(() => {
         async function prepare() {
           try {
@@ -59,7 +61,7 @@ export default function App() {
     
         prepare();
       }, []);
-
+      //로딩성공시 (SplashScreen)숨김
       const onLayoutRootView = useCallback(async () => {
         if (appIsReady) {
           await SplashScreen.hideAsync();
@@ -69,7 +71,7 @@ export default function App() {
       if (!appIsReady) {
         return null;
       }
-
+    //로컬에 저장 (AsyncStorage)
     const _saveTasks = async tasks => {
         try{
             await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
@@ -78,9 +80,7 @@ export default function App() {
             console.error(e);
         }
     };
-    
-
-
+    //추가
     const _addTask = () => {
         const ID = Date.now().toString();
         const newTaskObject = {
@@ -89,32 +89,33 @@ export default function App() {
         setNewTask('');
         _saveTasks({...tasks, ...newTaskObject});
     };
+    // 삭제
     const _deleteTask = id =>{
         const currentTasks = Object.assign({}, tasks);
-        delete currentTasks[id];
-        _saveTasks(currentTasks);
+                delete currentTasks[id];
+                _saveTasks(currentTasks);
     };
+   //맨앞 체크박스 변화
     const _toggleTask = id =>{
         const currentTasks = Object.assign({}, tasks);
         currentTasks[id]['completed'] = !currentTasks[id]['completed'];
         _saveTasks(currentTasks);
-        console.log(_saveTasks);
-        // console.log(currentTasks[id].completed);
     };
+    //내용 수정
     const _updateTask = item =>{
         const currentTasks = Object.assign({}, tasks);
         currentTasks[item.id] = item;
         _saveTasks(currentTasks);
     };
+    // 키보드탈출
     const _onBlur = () => {
         setNewTask('');
     }
-    
-    
-
+    //텍스트 변화
     const _handleTextChange = text =>{
         setNewTask(text);
     }
+    //전체삭제
     const _allDelete = () => {
         const currentTasks = Object.assign({}, tasks);
         Object.values(tasks).map(item => {
@@ -124,6 +125,7 @@ export default function App() {
             }
         });
     }
+    
     
     return (
         <ThemeProvider theme={theme}>

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import IconButton from "./IconButton";
 import { images } from "../Image";
 import Input from "./Input";
+import { Alert } from "react-native";
 
 const Container = styled.View`
  flex-direction: row;
@@ -21,7 +22,7 @@ const Contents = styled.Text`
     completed ? 'line-through' : 'none'};
 `;
 
-const Task = ({item, deleteTask, toggleTask, updateTask, onBlur}) =>{
+const Task = ({item, deleteTask, toggleTask, updateTask }) =>{
     const [isEditing, setIsEditing] = useState(false);
     const [text, setText] = useState(item.text);
     const _handleUpdateButtonPress = () =>{
@@ -41,6 +42,19 @@ const Task = ({item, deleteTask, toggleTask, updateTask, onBlur}) =>{
         }
     };
 
+    const beforeAlert = (allDelete) =>
+    Alert.alert('해당항목 삭제', '정말로 삭제하시겠습니까?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => allDelete(item.id)
+       ,
+    },
+    ]);
+
+    
     return isEditing ?(
         <Input
         value={text}
@@ -64,7 +78,8 @@ const Task = ({item, deleteTask, toggleTask, updateTask, onBlur}) =>{
             <IconButton 
             type={images.delete}
             id={item.id}
-            onPressOut={deleteTask}
+            onPressOut={() =>beforeAlert(deleteTask)}
+            // onPressOut={deleteTask}
             completed={item.completed}
             onBlur={_onBlur}
             />
