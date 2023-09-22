@@ -9,10 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.19.3",
     "expo": "~49.0.11",
+    "expo-app-loading": "^2.1.1",
     "expo-status-bar": "~1.6.0",
+    "prop-types": "^15.8.1",
     "react": "18.2.0",
-    "react-native": "0.72.4"
+    "react-native": "0.72.4",
+    "styled-components": "^6.0.8",
+    "expo-splash-screen": "~0.20.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
